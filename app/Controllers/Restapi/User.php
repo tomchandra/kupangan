@@ -5,18 +5,12 @@ namespace App\Controllers\Restapi;
 use \App\Libraries\Oauth;
 use \OAuth2\Request;
 use CodeIgniter\API\ResponseTrait;
-use App\Models\M_User;
+use App\Models\Restapi\M_User;
 use App\Controllers\BaseController;
 
 class User extends BaseController
 {
 	use ResponseTrait;
-	public function __construct()
-	{
-		header('Access-Control-Allow-Origin: *');
-		header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
-	}
-
 	public function login()
 	{
 		$oauth 		= new Oauth();
@@ -25,17 +19,19 @@ class User extends BaseController
 		$code 		= $respond->getStatusCode();
 		$body 		= json_decode($respond->getResponseBody());
 
-		// if (isset($body->error)) {
-		// 	$callback = [$body->error_description, null];
-		// } else {
-		// 	$callback = ["Success", $body];
-		// }
+		if (!isset($body->error) && $this->request->getPost('username')) {
+			$model 	= new M_User();
+			$user 	= $model->where('email', $this->request->getPost('username'))->first();
 
-		// $response 	= [
-		// 	"status" 	=> $code,
-		// 	"message" 	=> $callback[0],
-		// 	"data" 		=> $callback[1]
-		// ];
+			$data = [
+				'first_name' 	=> $user['first_name'],
+				'last_name'		=> $user['last_name'],
+				'job'			=> $user['job'],
+				'access_token' 	=> $body->access_token,
+			];
+
+			return $this->respond($data, $code);
+		}
 
 		return $this->respond($body, $code);
 	}
@@ -45,9 +41,9 @@ class User extends BaseController
 		helper('form');
 		$data = [];
 
-		if ($this->request->getMethod() != 'post')
+		if ($this->request->getMethod() != 'post') {
 			return $this->fail('Only post request is allowed');
-
+		}
 
 		$rules = [
 			'first_name' 		=> 'required|min_length[3]|max_length[20]',
@@ -64,11 +60,11 @@ class User extends BaseController
 			$model = new M_User();
 
 			$data = [
-				'first_name' => $this->request->getVar('first_name'),
-				'last_name' => $this->request->getVar('last_name'),
-				'email' => $this->request->getVar('email'),
-				'job' => $this->request->getVar('job'),
-				'password' => $this->request->getVar('password'),
+				'first_name' 	=> $this->request->getVar('first_name'),
+				'last_name' 	=> $this->request->getVar('last_name'),
+				'email'	 		=> $this->request->getVar('email'),
+				'job' 			=> $this->request->getVar('job'),
+				'password' 		=> $this->request->getVar('password'),
 			];
 
 			$user_id = $model->insert($data);
@@ -77,15 +73,5 @@ class User extends BaseController
 
 			return $this->respondCreated($data);
 		}
-	}
-
-
-
-	public function create()
-	{
-	}
-
-	public function edit()
-	{
 	}
 }
