@@ -50,7 +50,7 @@ class User extends BaseController
 			'last_name' 		=> 'required|min_length[3]|max_length[20]',
 			'email'	 			=> 'required|valid_email|is_unique[tbl_users.email]',
 			'job'	 			=> 'required',
-			'password' 			=> 'required|min_length[6]',
+			'password' 			=> 'required|min_length[6]|max_length[10]',
 			'password_confirm' 	=> 'matches[password]',
 		];
 
