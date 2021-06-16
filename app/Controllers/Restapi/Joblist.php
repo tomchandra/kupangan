@@ -19,7 +19,6 @@ class Joblist extends ResourceController
     public function index()
     {
         $data       = $this->foodModel->getJoblist();
-
         return $this->respond($data);
     }
 }
