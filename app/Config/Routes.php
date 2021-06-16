@@ -42,6 +42,14 @@ $routes->add('api/login', 'User::login', ['namespace' => 'App\Controllers\Restap
 $routes->add('api/register', 'User::register', ['namespace' => 'App\Controllers\Restapi']);
 $routes->add('api/joblist', 'Joblist::index', ['namespace' => 'App\Controllers\Restapi']);
 
+$routes->get('/', 'Pages::index');
+$routes->get('/dashboard', 'Pages::input');
+$routes->get('/logout', 'Login::logout');
+$routes->get('/master', 'Admin::index');
+$routes->post('/update', 'Admin::update');
+$routes->post('/delete', 'Admin::delete');
+$routes->post('/save', 'Admin::save');
+
 /*
  * --------------------------------------------------------------------
  * Additional Routing
