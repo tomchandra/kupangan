@@ -42,10 +42,6 @@ $routes->add('api/login', 'User::login', ['namespace' => 'App\Controllers\Restap
 $routes->add('api/register', 'User::register', ['namespace' => 'App\Controllers\Restapi']);
 $routes->add('api/joblist', 'Joblist::index', ['namespace' => 'App\Controllers\Restapi']);
 
-//$routes->post('/api/user/login', 'Restapi/User::login');
-//$routes->post('/api/user/register', 'Restapi/User::register');
-
-
 /*
  * --------------------------------------------------------------------
  * Additional Routing
