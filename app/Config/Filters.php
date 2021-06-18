@@ -64,6 +64,6 @@ class Filters extends BaseConfig
 	 * @var array
 	 */
 	public $filters = [
-		'oauthfilter' => ['before' => ['api/food', 'api/food/*', 'api/foodlist', 'api/foodlist/*', 'api/joblist']]
+		'oauthfilter' => ['before' => ['api/food', 'api/food/*', 'api/foodlist', 'api/foodlist/*']]
 	];
 }
