@@ -2,18 +2,31 @@
 
 namespace App\Controllers;
 
-use App\Models\UserModel;
 
 class Login extends BaseController
 {
 
     protected $request;
-    protected $UserModel;
+    protected $session;
+    protected $options;
+    protected $api_client;
+    protected $api_username;
+    protected $api_password;
+    protected $api_grant_type;
 
     public function __construct()
     {
-        $this->UserModel = new UserModel();
-        $this->request = \Config\Services::request();
+        $this->request        = \Config\Services::request();
+        $this->session        = session();
+        $this->api_username   = 'apikupangan';
+        $this->api_password   = '13f27c21a7bd4fd7ecf6187df1d29e34d5d3cbf8';
+        $this->api_grant_type = 'password';
+        $this->options        = [
+            'baseURI' => getenv('api.baseURI'),
+            'timeout' => 0
+        ];
+
+        $this->api_client = \Config\Services::curlrequest($this->options);
     }
 
     public function index()
@@ -28,59 +41,67 @@ class Login extends BaseController
 
     public function auth()
     {
-        $session = session();
-        $model = new UserModel();
-        $username = $this->request->getVar('username');
-        $password = $this->request->getVar('password');
-        $data = $model->where('email', $username)->first();
-
-        if ($data) {
-            //$pass = password_hash($data['password'], PASSWORD_DEFAULT);
-            $verify = password_verify($password, $data['password']);
-            if ($verify) {
-                $ses_data = [
-                    'username'      => $data['email'],
-                    'first_name'    => $data['first_name'],
-                    'last_name'     => $data['last_name'],
-                    'role'          => $data['role'],
+        $response = $this->api_client->request('POST', 'login', [
+            'auth'        => [$this->api_username, $this->api_password, 'basic'],
+            'http_errors' => false,
+            'form_params' => [
+                'username'   => $this->request->getPost('username'),
+                'password'   => $this->request->getPost('password'),
+                'grant_type' => 'password'
+            ]
+        ]);
+        $body   = json_decode($response->getBody());
+        switch ($response->getStatusCode()) {
+            case 200:
+                $data = [
+                    'first_name'    => $body->first_name,
+                    'last_name'     => $body->last_name,
+                    'job'           => $body->job,
+                    'role'          => 'user',
+                    'token'         => $body->access_token,
                     'logged_in'     => TRUE
                 ];
-                $session->set($ses_data);
-                return redirect()->to('/dashboard');
-            } else {
-                $session->setFlashdata('msg', 'Wrong Password');
-                return redirect()->to('/login');
-            }
-        } else {
-            $session->setFlashdata('msg', 'Email not Found');
-            return redirect()->to('/login');
+
+                $this->session->set($data, 3600);
+                return redirect()->to('dashboard');
+                break;
+            case 401:
+                $this->session->setFlashdata('msg', $body->error_description);
+                return redirect()->to('login');
+                break;
+            default:
+                return redirect()->to('login');
         }
     }
 
     public function sign_up()
     {
-        if ($this->request->isAJAX()) {
-            $model = new UserModel();
-            $data = $model->where('email', service('request')->getPost('username2'))->first();
-            //dd($data);
-            if ($data) {
-                echo json_encode(array("status" => FALSE));
-            } else {
-                $job = service('request')->getPost('profesi');
-                if (service('request')->getPost('other_job') != "") {
-                    $job = service('request')->getPost('other_job');
-                }
+        $response = $this->api_client->request('POST', 'register', [
+            'http_errors' => false,
+            'form_params' => [
+                'first_name'       => $this->request->getPost('first_name'),
+                'last_name'        => $this->request->getPost('last_name'),
+                'job'              => $this->request->getPost('job'),
+                'email'            => $this->request->getPost('email'),
+                'password'         => $this->request->getPost('password'),
+                'password_confirm' => $this->request->getPost('password_confirm')
+            ]
+        ]);
+        $body   = json_decode($response->getBody());
 
-                $data = array(
-                    'first_name' => service('request')->getPost('first_name'),
-                    'last_name' => service('request')->getPost('last_name'),
-                    'job' => $job,
-                    'email' => service('request')->getPost('user_id2'),
-                    'password' => password_hash(service('request')->getPost('password2'), PASSWORD_DEFAULT),
-                );
-                $this->UserModel->simpan_data($data);
-                echo json_encode(array("status" => TRUE));
-            }
+        switch ($response->getStatusCode()) {
+            case 200:
+                return json_encode(array("status" => TRUE));
+                break;
+            case 400:
+                $data = "";
+                foreach ($body->messages as $value) {
+                    $data .= $value . "<br/>";
+                }
+                return json_encode(array("status" => FALSE, "message" => $data));
+                break;
+            default:
+                return redirect()->to('login');
         }
     }
 

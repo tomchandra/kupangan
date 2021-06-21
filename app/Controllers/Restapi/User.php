@@ -46,12 +46,60 @@ class User extends BaseController
 		}
 
 		$rules = [
-			'first_name' 		=> 'required|min_length[3]|max_length[20]',
-			'last_name' 		=> 'required|min_length[3]|max_length[20]',
-			'email'	 			=> 'required|valid_email|is_unique[tbl_users.email]',
-			'job'	 			=> 'required',
-			'password' 			=> 'required|min_length[6]|max_length[10]',
-			'password_confirm' 	=> 'matches[password]',
+			'first_name' 		=> [
+				'label'  => 'Nama depan',
+				'rules'  => 'required|min_length[3]|max_length[20]',
+				'errors' => [
+					'required'   => '{field} harus di isi.',
+					'min_length' => '{field} minimal 3 karakter.',
+					'max_length' => '{field} maksimal 20 karakter.'
+
+				]
+			],
+			'last_name' 		=> [
+				'label'  => 'Nama belakang',
+				'rules'  => 'required|min_length[3]|max_length[20]',
+				'errors' => [
+					'required'   => '{field} harus di isi.',
+					'min_length' => '{field} minimal 3 karakter.',
+					'max_length' => '{field} maksimal 20 karakter.'
+
+				]
+			],
+			'email' 		=> [
+				'label'  => 'Email',
+				'rules'  => 'required|valid_email|is_unique[tbl_users.email]',
+				'errors' => [
+					'required' 	  => '{field} harus di isi.',
+					'valid_email' => 'Format email salah.',
+					'is_unique'   => '{field} Sudah digunakan.'
+
+				]
+			],
+			'job' 		=> [
+				'label'  => 'Pekerjaan',
+				'rules'  => 'required',
+				'errors' => [
+					'required'   => '{field} harus di isi.',
+				]
+			],
+			'password' 		=> [
+				'label'  => 'Password',
+				'rules'  => 'required|min_length[6]|max_length[10]',
+				'errors' => [
+					'required'   => '{field} harus di isi.',
+					'min_length' => '{field} minimal 6 karakter.',
+					'max_length' => '{field} maksimal 10 karakter.'
+
+				]
+			],
+			'password_confirm' 		=> [
+				'label'  => 'Password konfirmasi',
+				'rules'  => 'matches[password]',
+				'errors' => [
+					'matches'   => '{field} tidak sama.',
+				]
+			]
 		];
 
 		if (!$this->validate($rules)) {

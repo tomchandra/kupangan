@@ -55,10 +55,8 @@
                                 <ul>
                                     <?php
                                     if (session()->get('logged_in') == TRUE) {
-                                        $admin = session()->get('role') == 'admin' ? '<li><a href="/master">Master Data</a></li>' : '';
-                                        $menu  =  $admin . '
-                                                 <li><a href="' . base_url("/pages/input") . '">Kalkulator Bahan Pangan</a></li>
-                                                 <li><a href="' . base_url("/logout") . '">Logout</a></li>';
+                                        $menu  = '<li><a href="' . base_url("/pages/input") . '">Kalkulator Bahan Pangan</a></li>
+                                                  <li><a href="' . base_url("/logout") . '">Logout</a></li>';
                                     } else {
                                         $menu  = '<li><a href="' . base_url("/") . '">Beranda</a></li>
                                                   <li><a href="' . base_url("/login") . '">Login</a></li>';

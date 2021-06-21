@@ -11,7 +11,7 @@
             <form action="<?= base_url('/login/auth') ?>" method="post">
                 <div class="mb-3">
                     <label for="InputForEmail" class="form-label">Email</label>
-                    <input type="text" name="username" class="form-control" id="InputForEmail" value="<?= set_value('email') ?>">
+                    <input type="text" name="username" class="form-control" id="InputForEmail" value="<?= set_value('username') ?>">
                 </div>
                 <div class="mb-3">
                     <label for="InputForPassword" class="form-label">Password</label>
@@ -40,7 +40,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="InputForProfesi" class="form-label">Profesi</label>
-                    <select id="InputForProfesi" class="w-100" name="profesi">
+                    <select id="InputForProfesi" class="w-100">
                         <option value="">Pilih Profesi</option>
                         <option value="ahligizi">Ahli Gizi</option>
                         <option value="dokter">Dokter</option>
@@ -52,17 +52,20 @@
                 </div>
                 <div id="other-job" class="mb-3 d-none">
                     <label for="InputForOtherJob" class="form-label">Sebutkan,</label>
-                    <input type="text" name="other_job" class="form-control" id="InputForOtherJob">
+                    <input type="text" name="job" class="form-control" id="InputForOtherJob">
                 </div>
                 <div class="mb-3">
                     <label for="InputForEmail2" class="form-label">Email</label>
-                    <input type="text" name="username2" class="form-control" id="InputForEmail2">
+                    <input type="text" name="email" class="form-control" id="InputForEmail2">
                 </div>
                 <div class="mb-3">
                     <label for="InputForPassword2" class="form-label">Password</label>
-                    <input type="password" name="password2" class="form-control" id="InputForPassword2">
+                    <input type="password" name="password" class="form-control" id="InputForPassword2">
                 </div>
-
+                <div class="mb-3">
+                    <label for="InputForPassword3" class="form-label">Konfirmasi Password</label>
+                    <input type="password" name="password_confirm" class="form-control" id="InputForPassword3">
+                </div>
                 <button id="signup-agreement" class="btn btn-primary">Sign Up</button>
                 <button id="login" class="btn btn-success">Login</button>
             </form>
@@ -88,11 +91,14 @@
 
     $("#InputForProfesi").selectize({
         onChange: function(v, e) {
+            var selected_text = this.getItem(v)[0].innerHTML;
             if (v == "tenagalainnya") {
+                $("#InputForOtherJob").val("");
                 $("#other-job").removeClass('d-none');
                 $('#InputForOtherJob').focus();
             } else {
                 $("#other-job").addClass('d-none');
+                $("#InputForOtherJob").val(selected_text);
             }
         }
     });
@@ -111,17 +117,6 @@
 
     $("#signup-agreement").click(function(e) {
         e.preventDefault();
-
-        if ($("#InputForUserID2").val().trim() == "" || $("#InputForPassword2").val().trim() == "" || $("#InputForName").val().trim() == "" || $("#InputForProfesi").val().trim() == "" || ($("#InputForProfesi").val().trim() == "tenagalainnya" && $("#InputForOtherJob").val().trim() == "")) {
-
-            Swal.fire({
-                type: 'error',
-                title: 'Perhatian',
-                html: 'Silahkan isi data dengan lengkap',
-                timer: 2000
-            });
-            return;
-        }
 
         var dmca = `
         <div style="overflow-y: scroll; width:100%; height: 300px; max-height:300px; padding:10px; text-align:justify; font-size:0.8em; border :2px solid #bbb;" readonly>
@@ -165,14 +160,11 @@
                             location.reload();
                         } else {
                             Swal.fire({
-                                type: 'warning',
-                                title: 'Pandaftaran Gagal',
-                                html: 'User ID sudah digunakan, silahkan menggunakan User ID lain!',
-                                showConfirmButton: true,
-                                timer: 2000
+                                type: 'error',
+                                title: 'Perhatian!',
+                                html: result.message,
+                                showConfirmButton: true
                             });
-
-                            $('#InputForUserID2').focus();
                         }
                     }
                 });

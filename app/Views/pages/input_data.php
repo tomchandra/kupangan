@@ -286,14 +286,14 @@
 		$('body').on('change', '.getindex', function() {
 			var index = $(this).closest('tr').index() + 1;
 			var td = $('table#data-food tbody tr:nth-child(' + index + ') td:nth-child(4)').text();
-			console.log(index);
-			console.log(td);
+			//console.log(index);
+			//console.log(td);
 		});
 
 
 		$('body').on('click', '.delete-row', function() {
 			var index = $(this).closest('tr').index() + 1;
-			console.log(index);
+			//console.log(index);
 			var foodName = $(this).data('food');
 
 			Swal.fire({
@@ -324,7 +324,7 @@
 			var selectize = $select[0].selectize;
 			selectize.setValue($(this).data("foodid"));
 			$('#food-weight').val($(this).data("weight"));
-			console.log(index);
+			//console.log(index);
 		});
 
 		function calculate(berat, data) {
@@ -428,7 +428,7 @@
 			});
 
 			total_gizi.air += "|Air|g";
-			total_gizi.energi += "|Energi|Kkal";
+			total_gizi.energi += "|Energi|Kal";
 			total_gizi.protein += "|Protein|g";
 			total_gizi.lemak += "|Lemak|g";
 			total_gizi.kh += "|KH|g";
@@ -504,11 +504,11 @@
 
 			for (var k in total) {
 				var ttl = total[k].split("|");
-				console.log(ttl[0]);
+				//console.log(ttl[0]);
 				$("#data-food tfoot tr td:not(.none)").each(function() {
 					var id = $(this).attr("id");
 					if ('total-' + k == id) {
-						$('#' + id).html(roundNumber(ttl[0]) + ' ' + ttl[2]);
+						$('#' + id).html(roundNumber(ttl[0]));
 					}
 				});
 			}

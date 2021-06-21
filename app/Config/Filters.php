@@ -4,6 +4,7 @@ namespace Config;
 
 use App\Filters\OauthFilter;
 use App\Filters\CorsFilter;
+use App\Filters\SessionFilter;
 use CodeIgniter\Config\BaseConfig;
 use CodeIgniter\Filters\CSRF;
 use CodeIgniter\Filters\DebugToolbar;
@@ -18,11 +19,12 @@ class Filters extends BaseConfig
 	 * @var array
 	 */
 	public $aliases = [
-		'csrf'     	  => CSRF::class,
-		'toolbar'  	  => DebugToolbar::class,
-		'honeypot' 	  => Honeypot::class,
-		'oauthfilter' => OauthFilter::class,
-		'corsfilter'  => CorsFilter::class,
+		'csrf'     	  	 => CSRF::class,
+		'toolbar'  	  	 => DebugToolbar::class,
+		'honeypot' 	  	 => Honeypot::class,
+		'oauthfilter' 	 => OauthFilter::class,
+		'corsfilter'     => CorsFilter::class,
+		'sessionfilter'  => SessionFilter::class,
 	];
 
 	/**
@@ -64,6 +66,7 @@ class Filters extends BaseConfig
 	 * @var array
 	 */
 	public $filters = [
-		'oauthfilter' => ['before' => ['api/food', 'api/food/*', 'api/foodlist', 'api/foodlist/*']]
+		'oauthfilter'   => ['before' => ['api/food', 'api/food/*', 'api/foodlist', 'api/foodlist/*']],
+		'sessionfilter' => ['before' => ['/input', '/dashboard']]
 	];
 }
