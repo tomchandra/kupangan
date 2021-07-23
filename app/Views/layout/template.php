@@ -29,6 +29,27 @@
         div#signup-container {
             display: none;
         }
+
+        .tableFixHead {
+            position: relative;
+            overflow-y: auto;
+            height: 200px;
+        }
+
+        table#data-food thead tr th,
+        table#data-food tfoot tr td {
+            position: sticky;
+            z-index: 1;
+        }
+
+        table#data-food thead tr.tr-first th,
+        table#data-food thead tr.tr-second th {
+            top: 0;
+        }
+
+        table#data-food tfoot tr td {
+            bottom: 0;
+        }
     </style>
     <title><?= $title; ?></title>
 </head>
@@ -89,6 +110,7 @@
     <script src="<?= base_url('public/themes/js/active.js'); ?>"></script>
     <script src="<?= base_url('public/selectize/selectize.js'); ?>"></script>
     <script src="<?= base_url('public/alert/sweetalert2.all.min.js'); ?>"></script>
+
     <?= $this->renderSection('extra-js'); ?>
 </body>
 
