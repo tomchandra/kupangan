@@ -42,12 +42,12 @@ class Pages extends BaseController
 		return view('pages/input_data', $data);
 	}
 
-	public function help()
+	public function produk()
 	{
 		$data = [
-			'title' => 'KUDAPAN - Help'
+			'title' => 'KUDAPAN - Produk'
 		];
-		return view('pages/help', $data);
+		return view('pages/produk');
 	}
 
 	public function login()
@@ -114,16 +114,10 @@ class Pages extends BaseController
 		$header = '
 		<table width="100%">
 			<tr>
-				<td align="center"><img src="public/images/logo-otsuka.png"></td>
+				<td align="center"><img src="public/images/logo-otsuka.png" height="32px"></td>
 			</tr>
 			<tr>
-				<td align="center" style="font-size:0.8em;font-weight:bold;">OTSUKA INDONESIA</td>
-			</tr>
-			<tr>
-				<td align="center" style="font-size:1.8em;font-weight:bold;">KALKULATOR ENTERAL</td>
-			</tr>
-			<tr>
-				<td align="center" style="font-size:0.8em;font-weight:bold;">Ahli Gizi Indonesia</td>
+				<td align="center" style="font-size:1.6em;font-weight:bold;">KALKULATOR BAHAN PANGAN</td>
 			</tr>
 		</table>
 		<hr/>';

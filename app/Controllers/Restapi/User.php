@@ -108,6 +108,7 @@ class User extends BaseController
 			$model = new M_User();
 
 			$data = [
+				'status'		=> TRUE,
 				'first_name' 	=> $this->request->getVar('first_name'),
 				'last_name' 	=> $this->request->getVar('last_name'),
 				'email'	 		=> $this->request->getVar('email'),

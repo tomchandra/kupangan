@@ -47,7 +47,7 @@
                         <option value="bidan">Bidan</option>
                         <option value="radiographer">Radiographer</option>
                         <option value="ahlikesmas">Ahli Kesmas</option>
-                        <option value="tenagalainnya">Tenaga Lainya</option>
+                        <option value="tenagalainnya">Tenaga Kesehatan Lainya</option>
                     </select>
                 </div>
                 <div id="other-job" class="mb-3 d-none">

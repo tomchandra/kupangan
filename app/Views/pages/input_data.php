@@ -54,19 +54,19 @@
 	</div>
 	<div class="row">
 		<div class="col-12 mt-2">
-			<div class="table-responsive">
-				<table id="data-food" class='table table-sm table-bordered text-center border-dark' style="font-size: 14px;" width="100%">
+			<div class="table-responsive tableFixHead">
+				<table id="data-food" class='table table-sm table-bordered text-center border-dark' style="font-size: 0.7vw;" width="100%">
 					<thead>
-						<tr class="table-primary">
+						<tr class="tr-first table-primary">
 							<th rowspan="4" class="align-middle text-left">Nama Bahan Makanan</th>
 							<th rowspan="4" class="align-middle">BERAT <br />(g)</th>
 							<th rowspan="4" class="align-middle">SUMBER</th>
 						</tr>
-						<tr>
-							<th colspan="22" class="table-warning">KOMPOSISI ZAT GIZI MAKANAN</th>
+						<tr class="tr-second">
+							<th colspan="22" class="table-warning first">KOMPOSISI ZAT GIZI MAKANAN</th>
 							<th rowspan="4" class="table-primary align-middle">Aksi</th>
 						</tr>
-						<tr class="table-primary">
+						<tr class="tr-third table-primary">
 							<th>AIR</th>
 							<th>ENERGI</th>
 							<th>PROTEIN</th>
@@ -90,7 +90,7 @@
 							<th>VIT-C</th>
 							<th rowspan="2" class="align-middle">BDD (%)</th>
 						</tr>
-						<tr class="table-primary">
+						<tr class="tr-forth table-primary">
 							<th>(g)</th>
 							<th>(Kal)</th>
 							<th>(g)</th>
@@ -153,9 +153,13 @@
 <?= $this->section('extra-js'); ?>
 <script>
 	$(document).ready(function() {
-		// addNumeration("table-numero")
+		fixHeadTable();
 		var data_source;
 		var data_print = [];
+
+		$(window).on('resize', function() {
+			fixHeadTable();
+		});
 
 		$.ajaxSetup({
 			headers: {
@@ -193,7 +197,7 @@
 			} else {
 				var data = calculate($('#food-weight').val(), data_source);
 				//<a href="#" class="btn btn-outline-success btn-sm edit-row" data-foodid='${data.foodid}' data-weight='${data.weight}'>Edit</a> 
-				var action = `<a href="#" class="btn btn-outline-danger btn-sm delete-row" data-food="${$('#food-list').text()}">Hapus</a>`;
+				var action = `<a href="#" class="btn btn-outline-danger btn-sm delete-row" data-food="${$('#food-list').text()}" style="font-size:0.7vw">Hapus</a>`;
 				var id = $('#food-list').val();
 				let html = `<tr id='data-${id}' class="table-light">
                         <td class="align-middle text-left">${data.foodname}</td>
@@ -523,6 +527,12 @@
 			$('#add-food').trigger('click');
 
 		}
+	}
+
+	function fixHeadTable() {
+		var firstheight = $('.first').outerHeight();
+		$("thead tr.tr-third th").css("top", firstheight);
+		$("thead tr.tr-forth th").css("top", (firstheight - 1) * 2);
 	}
 </script>
 <?= $this->endSection(); ?>
